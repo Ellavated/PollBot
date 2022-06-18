@@ -15,11 +15,11 @@ client.on('ready', () => {
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content.startsWith(prefix) || message.channel.type == 'DM') return;
 
-  const messageArray = message.content.split(' ');
-  const cmd = messageArray[0];
-  const args = messageArray.slice(1);
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const cmd = args.shift().toLowerCase();
+  if (cmd.length === 0) return;
 
-  if (cmd == 'p!create') {
+  if (cmd == 'create') {
     let pollChannel = message.mentions.channels.first();
     if (!pollChannel) return message.reply("you must specify a channel");
     let pollDesc = args.slice(1).join(' ');
