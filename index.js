@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, Collection } = require("discord.js");
+const { Client } = require("discord.js");
 const client = new Client({
   intents: ['GUILDS', 'GUILD_MESSAGES']
 });
@@ -19,19 +19,38 @@ client.on('messageCreate', async (message) => {
   const cmd = args.shift().toLowerCase();
   if (cmd.length === 0) return;
 
-  if (cmd == 'create') {
-    let pollChannel = message.mentions.channels.first();
-    if (!pollChannel) return message.reply("you must specify a channel");
-    let pollDesc = args.slice(1).join(' ');
+  // TODO: command handler, if i expand this
+  switch (cmd) {
+    case "create":
+      let pollChannel = message.mentions.channels.first();
+      if (!pollChannel) return message.reply("you must specify a channel");
+      let pollDesc = args.slice(1).join(' ');
 
-    let pollMsg = await pollChannel.send({
-      embeds: [{
-        title: 'New Poll!',
-        description: pollDesc
-      }]
-    });
-    
-    await pollMsg.react('👍');
-    await pollMsg.react('👎');
+      let pollMsg = await pollChannel.send({
+        embeds: [{
+          title: 'New Poll!',
+          description: pollDesc,
+          color: Math.floor(Math.random() * 16777214) + 1,
+        }]
+      });
+      
+      await pollMsg.react('👍');
+      await pollMsg.react('👎');
+      return;
+    case "help":
+      return message.channel.send({
+        embeds: [{
+          title: "Help!",
+          thumbnail: client.user.displayAvatarURL(),
+          footer: "Created by Lunaaa#8447",
+          timestamp: new Date,
+          fields: [
+            {
+              name: "create",
+              value: "p!create <#channel> <description>\nCreates a poll!"
+            }
+          ]
+        }]
+      })
   }
 });
