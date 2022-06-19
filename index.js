@@ -19,9 +19,10 @@ client.on('messageCreate', async (message) => {
   const cmd = args.shift().toLowerCase();
   if (cmd.length === 0) return;
 
-  // TODO: command handler, if i expand this
+  // TODO: command handler, if i choose to expand this
   switch (cmd) {
     case "create":
+      if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply("You do not have permission to use this command.");
       let pollChannel = message.mentions.channels.first();
       if (!pollChannel) return message.reply("you must specify a channel");
       let pollDesc = args.slice(1).join(' ');
